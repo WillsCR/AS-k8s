@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery
+  template:
+    metadata:
+      labels:
+        app: celery
+    spec:
+      containers:
+      - name: celery
+        image: notification_project-celery:latest
+        imagePullPolicy: Never  
+        command: ["celery", "-A", "notification_project", "worker", "--loglevel=info"]
+        env:
+        - name: DATABASE_HOST
+          value: "postgres-service"
+        - name: DATABASE_PORT
+          value: "5432"
+        - name: DATABASE_NAME
+          value: "dbNotification"
+        - name: DATABASE_USER
+          value: "postgres"
+        - name: DATABASE_PASSWORD
+          value: "postgres"
