@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: drf-config
+data:
+  DATABASE_NAME: "drf_database"
+  DJANGO_SETTINGS_MODULE: "notification_project.settings"

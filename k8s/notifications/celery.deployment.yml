@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drf-celery
+  labels:
+    app: drf-celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drf-celery
+  template:
+    metadata:
+      labels:
+        app: drf-celery
+    spec:
+      containers:
+      - name: drf-celery
+        image: <tu_imagen_docker> 
+        command: ["python", "-m", "celery", "-A", "notification_project", "worker", "--loglevel=info"]
+        envFrom:
+        - configMapRef:
+            name: drf-config
+        - secretRef:
+            name: drf-secrets

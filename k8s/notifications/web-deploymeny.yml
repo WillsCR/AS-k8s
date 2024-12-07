@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drf-app
+  labels:
+    app: drf-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: drf-app
+  template:
+    metadata:
+      labels:
+        app: drf-app
+    spec:
+      containers:
+      - name: drf-app
+        image: <tu_imagen_docker> 
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: drf-config
+        - secretRef:
+            name: drf-secrets
+        volumeMounts:
+        - name: app-volume
+          mountPath: /app
+      volumes:
+      - name: app-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drf-app-service
+spec:
+  selector:
+    app: drf-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: LoadBalancer
